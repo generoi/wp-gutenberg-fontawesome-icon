@@ -1,21 +1,19 @@
 <?php
 /*
-Plugin Name:        Gutenberg Plugin Boilerplate
+Plugin Name:        Gutenberg FontAwesome Icon
 Plugin URI:         http://genero.fi
-Description:        A boilerplate WordPress Gutenberg block
+Description:        Provides an inline format for inserting FontAwesome icons
 Version:            1.0.0
 Author:             Genero
 Author URI:         http://genero.fi/
 License:            MIT License
 License URI:        http://opensource.org/licenses/MIT
 */
-namespace GeneroWP\BlockBoilerplate;
+namespace GeneroWP\FontawesomeIconFormat;
 
 use Puc_v4_Factory;
 use GeneroWP\Common\Singleton;
 use GeneroWP\Common\Assets;
-use Illuminate\Support\Str;
-use ReflectionClass;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -31,10 +29,10 @@ class Plugin
     use Assets;
 
     public $version = '1.0.0';
-    public $plugin_name = 'wp-gutenberg-boilerplate';
+    public $plugin_name = 'wp-gutenberg-fontawesome-icon';
     public $plugin_path;
     public $plugin_url;
-    public $github_url = 'https://github.com/generoi/wp-gutenberg-boilerplate';
+    public $github_url = 'https://github.com/generoi/wp-gutenberg-fontawesome-icon';
 
     public function __construct()
     {
@@ -48,32 +46,11 @@ class Plugin
 
     public function init()
     {
-        add_action('enqueue_block_assets', [$this, 'block_assets']);
         add_action('enqueue_block_editor_assets', [$this, 'block_editor_assets']);
-
-        foreach (glob(__DIR__ . '/src/blocks/*/*.php') as $file) {
-            $composer = __NAMESPACE__ . str_replace(
-                ['/', '.php'],
-                ['\\', ''],
-                Str::after($file, __DIR__ . '/src')
-            );
-
-            if (is_subclass_of($composer, Block::class) && ! (new ReflectionClass($composer))->isAbstract()) {
-                (new $composer())->compose();
-            }
-        }
-    }
-
-    public function block_assets()
-    {
-        $this->enqueueStyle("{$this->plugin_name}/css", 'dist/style.css');
-        $this->enqueueScript("{$this->plugin_name}/js", 'dist/index.js');
     }
 
     public function block_editor_assets()
     {
-        $this->enqueueStyle("{$this->plugin_name}/editor/css", 'dist/editor.css', ['wp-edit-blocks', 'common']);
-
         if ($manifest = include __DIR__ . '/dist/manifest.asset.php') {
             $this->enqueueScript("{$this->plugin_name}/editor/js", 'dist/editor.js', $manifest['dependencies']);
         }
