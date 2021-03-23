@@ -7,7 +7,7 @@ import { RichTextToolbarButton } from '@wordpress/block-editor';
 const settings = {
   name: 'genero/fontawesome-icon',
   title: 'FontAwesome Icon',
-  tagName: 'span',
+  tagName: 'i',
   className: null,
   attributes: {
     className: 'class',
@@ -95,7 +95,7 @@ function InsertIcon({
 
   function onClick() {
     const el = create({
-      html: '<span class="fa fa-flag"></span> ',
+      html: '<i class="fa fa-flag"></i> ',
     });
     onChange(insert(value, el));
   }
