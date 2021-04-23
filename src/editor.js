@@ -19,7 +19,7 @@ function InlineUI({
   value,
   onChange,
   isObjectActive,
-  activeObjectAttributes
+  activeObjectAttributes,
 }) {
   const { className } = activeObjectAttributes;
   const [ classNames, setClassNames ] = useState(className);
