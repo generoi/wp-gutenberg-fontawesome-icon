@@ -20,14 +20,15 @@ function InlineUI({
   onChange,
   isObjectActive,
   activeObjectAttributes,
+  contentRef,
 }) {
+  const { defaultView } = contentRef.current.ownerDocument;
   const { className } = activeObjectAttributes;
   const [ classNames, setClassNames ] = useState(className);
   const anchorRef = useMemo(() => {
-    const selection = window.getSelection();
+    const selection = defaultView.getSelection();
     return selection.rangeCount ? selection.getRangeAt(0) : null;
   }, [isObjectActive]);
-
 
   return (
     <Popover
@@ -82,9 +83,12 @@ function InsertIcon({
   onChange,
   isObjectActive,
   activeObjectAttributes,
+  contentRef,
 }) {
+  const {defaultView} = contentRef.current.ownerDocument;
+
   useEffect(() => {
-    const selection = window.getSelection();
+    const selection = defaultView.getSelection();
     if (selection.anchorNode?.classList?.contains('fa')) {
       const range = document.createRange();
       range.selectNode(selection.anchorNode);
@@ -118,6 +122,7 @@ function InsertIcon({
           onChange={ onChange }
           activeObjectAttributes={ activeObjectAttributes }
           isObjectActive={ isObjectActive }
+          contentRef={ contentRef }
         />
       ) }
     </>
