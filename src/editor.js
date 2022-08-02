@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
-import { useState, useMemo, useEffect } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { Path, SVG, TextControl, Popover, Button } from '@wordpress/components';
-import { registerFormatType, insert, create } from '@wordpress/rich-text';
+import { registerFormatType, insert, create, useAnchorRef } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 
 const settings = {
@@ -18,17 +18,17 @@ const settings = {
 function InlineUI({
   value,
   onChange,
-  isObjectActive,
   activeObjectAttributes,
   contentRef,
 }) {
-  const { defaultView } = contentRef.current.ownerDocument;
   const { className } = activeObjectAttributes;
   const [ classNames, setClassNames ] = useState(className);
-  const anchorRef = useMemo(() => {
-    const selection = defaultView.getSelection();
-    return selection.rangeCount ? selection.getRangeAt(0) : null;
-  }, [isObjectActive]);
+
+  const anchorRef = useAnchorRef({
+    ref: contentRef,
+    value,
+    settings,
+  });
 
   return (
     <Popover
@@ -85,9 +85,8 @@ function InsertIcon({
   activeObjectAttributes,
   contentRef,
 }) {
-  const {defaultView} = contentRef.current.ownerDocument;
-
   useEffect(() => {
+    const {defaultView} = contentRef.current.ownerDocument;
     const selection = defaultView.getSelection();
     if (selection.anchorNode?.classList?.contains('fa')) {
       const range = document.createRange();
